@@ -14,3 +14,15 @@ async def fetch_movies(total_pages):
         results = await asyncio.gather(*tasks)  # Fetch all pages in parallel
         movies.extend([movie for page in results for movie in page])  # Flatten results
     return movies
+
+async def fetch_page(session, page):
+    params = {
+        "api_key" : os.getenv("API_KEY"),
+        "page" : page,
+    } 
+    async with session.get(f"{BASE_URL}/discover/movie" , params= params) as response:
+        return (await response.json()).get("results" , []) if response.status == 200 else []
+
+# Run the async function
+movies = asyncio.run(fetch_movies(3))  # Fetch first 3 pages of English movies
+print(f"Fetched {len(movies)} movies.")
