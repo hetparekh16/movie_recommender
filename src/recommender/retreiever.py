@@ -23,8 +23,8 @@ async def fetch_movies(total_pages,language):
     movies = []
     async with aiohttp.ClientSession() as session:
         tasks = [fetch_page(session, page , language) for page in range(1, total_pages + 1)]
-        results = await asyncio.gather(*tasks)  # Fetch all pages in parallel
-        movies.extend([movie for page in results for movie in page])  # Flatten results
+        results = await asyncio.gather(*tasks)  
+        movies.extend([movie for page in results for movie in page]) 
     return movies
 
 
@@ -44,6 +44,7 @@ async def store_movies(total_pages, language):
     for movie in movies:
         collection.add(
             ids=str(movie["id"]),
+            documents=[movie["overview"] if movie["overview"] else "No description available"], 
             metadatas=[{
             'adult': movie["adult"],
             'genres': ", ".join([genre_mapping.get(genre_id, "Unknown") for genre_id in movie.get("genre_ids", [])]),
@@ -51,16 +52,15 @@ async def store_movies(total_pages, language):
             'original_title': movie["original_title"],
             'overview': movie["overview"],
             'popularity': movie["popularity"],
-            'poster_path': f"https://image.tmdb.org/t/p/w500{('poster_path')}",
+            'poster_path': f"https://image.tmdb.org/t/p/w500{('poster_path')}" if movie.get("poster_path") else "",
             'release_date': movie["release_date"],
             'title': movie["title"],
             'vote_average': movie["vote_average"],
             'vote_count': movie["vote_count"],
             }]
         )
-        print(f"Stored {len(movies)} movies in ChromaDB!")
 
 
-asyncio.run(store_movies(3, "en"))  # Fetch 3 pages of English movies
+asyncio.run(store_movies(100, "en")) 
 
 
