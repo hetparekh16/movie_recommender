@@ -10,6 +10,15 @@ load_dotenv()
 chroma_client = chromadb.PersistentClient(path= f"{BASE_PATH}/data") 
 collection = chroma_client.get_or_create_collection(name="movies")
 
+async def fetch_genre(language):
+    async with aiohttp.ClientSession() as session:
+        params = { "api_key" : os.getenv("API_KEY"),
+        "language" : language}
+        async with session.get(f"{BASE_URL}/genre/movie/list" , params= params) as response:
+            data = await response.json()
+            return {genre["id"]: genre["name"] for genre in data.get("genres", [])}
+                
+
 async def fetch_movies(total_pages,language):
     movies = []
     async with aiohttp.ClientSession() as session:
@@ -17,6 +26,7 @@ async def fetch_movies(total_pages,language):
         results = await asyncio.gather(*tasks)  # Fetch all pages in parallel
         movies.extend([movie for page in results for movie in page])  # Flatten results
     return movies
+
 
 async def fetch_page(session, page, language):
     params = {
@@ -26,6 +36,7 @@ async def fetch_page(session, page, language):
     } 
     async with session.get(f"{BASE_URL}/discover/movie" , params= params) as response:
         return (await response.json()).get("results" , []) if response.status == 200 else []
+    
 
 async def store_movies(total_pages, language):
     movies = await fetch_movies(total_pages , language)
