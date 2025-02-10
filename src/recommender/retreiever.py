@@ -40,13 +40,13 @@ async def fetch_page(session, page, language):
 
 async def store_movies(total_pages, language):
     movies = await fetch_movies(total_pages , language)
-
+    genre_mapping = await fetch_genre(language) 
     for movie in movies:
         collection.add(
             ids=str(movie["id"]),
             metadatas=[{
             'adult': movie["adult"],
-            'genre_ids': movie["genre_ids"],
+            'genres': ", ".join([genre_mapping.get(genre_id, "Unknown") for genre_id in movie.get("genre_ids", [])]),
             'original_language': movie["original_language"],
             'original_title': movie["original_title"],
             'overview': movie["overview"],
@@ -59,6 +59,7 @@ async def store_movies(total_pages, language):
             }]
         )
         print(f"Stored {len(movies)} movies in ChromaDB!")
+
 
 asyncio.run(store_movies(3, "en"))  # Fetch 3 pages of English movies
 
