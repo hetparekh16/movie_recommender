@@ -151,3 +151,14 @@ bollywood_series = fetch_series_by_language(
 hollywood_series = fetch_series_by_language(
     total_pages=200, genre_mapping=genre_mapping, language="en"
 )
+
+bollywood_movies = pd.DataFrame(bollywood_movies)
+hollywood_movies = pd.DataFrame(hollywood_movies)
+bollywood_series = pd.DataFrame(bollywood_series)
+hollywood_series = pd.DataFrame(hollywood_series)
+
+
+bollywood_movies.to_csv("../data/bollywood_movies.csv", index=False)
+hollywood_movies.to_csv("../data/hollywood_movies.csv", index=False)
+bollywood_series.to_csv("../data/bollywood_series.csv", index=False)
+hollywood_series.to_csv("../data/hollywood_series.csv", index=False)
