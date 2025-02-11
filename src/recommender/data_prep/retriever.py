@@ -132,3 +132,22 @@ def get_genres():
     else:
         print(f"Failed to fetch genres: {response.status_code}")
         return {}
+
+
+genre_mapping = get_genres()
+
+bollywood_movies = fetch_movies_by_language(
+    total_pages=500, genre_mapping=genre_mapping, language="hi"
+)
+
+hollywood_movies = fetch_movies_by_language(
+    total_pages=500, genre_mapping=genre_mapping, language="en"
+)
+
+bollywood_series = fetch_series_by_language(
+    total_pages=200, genre_mapping=genre_mapping, language="hi"
+)
+
+hollywood_series = fetch_series_by_language(
+    total_pages=200, genre_mapping=genre_mapping, language="en"
+)
