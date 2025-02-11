@@ -118,3 +118,35 @@ elif nav_option == "Series":
             filtered_df.sample(20) if len(filtered_df) > 20 else filtered_df
         )
         display_movie_cards(series_to_display.to_dict(orient="records"))
+
+
+# Watch something similar
+elif nav_option == "Watch something similar":
+    st.title("Watch Something Similar")
+    st.write("Enter the title of a movie or series to find similar content.")
+
+    st.sidebar.header("Choose a Movie or Series")
+
+    option = st.sidebar.radio(
+        "Choose movie or series", ["Movie :movie_camera:", "Series :tv:"]
+    )
+
+    if option == "Movie :movie_camera:":
+        movie_title = st.selectbox("Enter a movie title", movies["Title"])
+        if st.button("Recommend Movies"):
+            recommended_movies = recommend_movies(movie_title)
+            display_movie_cards(
+                movies[movies["Title"].isin(recommended_movies)].to_dict(
+                    orient="records"
+                )
+            )
+
+    else:
+        series_title = st.selectbox("Enter a series title", series["Title"])
+        if st.button("Recommend Series"):
+            recommended_series = recommend_series(series_title)
+            display_movie_cards(
+                series[series["Title"].isin(recommended_series)].to_dict(
+                    orient="records"
+                )
+            )
