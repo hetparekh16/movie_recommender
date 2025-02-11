@@ -18,3 +18,10 @@ bollywood_movies.drop_duplicates(inplace=True)
 hollywood_movies.drop_duplicates(inplace=True)
 bollywood_series.drop_duplicates(inplace=True)
 hollywood_series.drop_duplicates(inplace=True)
+
+movies = pd.concat([bollywood_movies, hollywood_movies], ignore_index=True)
+series = pd.concat([bollywood_series, hollywood_series], ignore_index=True)
+
+movies.to_csv(BASE_PATH / "data/processed_data/movies.csv", index=False)
+series.to_csv(BASE_PATH / "data/processed_data/series.csv", index=False)
+print("Data preprocessing completed successfully 🥳")
