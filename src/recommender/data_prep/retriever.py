@@ -79,3 +79,45 @@ def fetch_movies_by_language(
         else:
             print(f"Failed to fetch data for page {page}: {response.status_code}")
     return movies
+
+
+def fetch_series_by_language(total_pages, genre_mapping, language, include_adult=False):
+    series = []
+    for page in range(1, total_pages + 1):
+        params = {
+            "api_key": API_KEY,
+            "language": "en-US",
+            "sort_by": "popularity.desc",
+            "page": page,
+            "include_adult": include_adult,
+            "with_original_language": language,  # Filter by language
+        }
+        response = requests.get(SERIES_URL, params=params)
+        if response.status_code == 200:
+            results = response.json().get("results", [])
+            for item in results:
+                genres = [
+                    genre_mapping.get(genre_id, "Unknown")
+                    for genre_id in item.get("genre_ids", [])
+                ]
+                series.append(
+                    {
+                        "Title": item.get("name"),
+                        "Original Title": item.get("original_name"),
+                        "Genres": ", ".join(genres),
+                        "Language": item.get("original_language"),
+                        "Release Year": item.get("first_air_date", "")[:4],
+                        "Rating": item.get("vote_average"),
+                        "Vote Count": item.get("vote_count"),
+                        "Popularity": item.get("popularity"),
+                        "Description": item.get("overview"),
+                        "Poster Path": (
+                            f"https://image.tmdb.org/t/p/w500{item.get('poster_path')}"
+                            if item.get("poster_path")
+                            else None
+                        ),
+                    }
+                )
+        else:
+            print(f"Failed to fetch data for page {page}: {response.status_code}")
+    return series
