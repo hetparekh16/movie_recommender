@@ -19,3 +19,15 @@ async def fetch_genre(language):
         ) as response:
             data = await response.json()
             return {genre["id"]: genre["name"] for genre in data.get("genres", [])}
+
+
+async def fetch_page(session, page, language):
+    params = {
+        "api_key": os.getenv("API_KEY"),
+        "page": page,
+        "language": language,
+    }
+    async with session.get(f"{BASE_URL}/discover/movie", params=params) as response:
+        return (
+            (await response.json()).get("results", []) if response.status == 200 else []
+        )
