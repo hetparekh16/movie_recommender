@@ -17,3 +17,15 @@ series_embeddings = model.encode(series["Tags"].tolist())
 
 movie_similarity = model.similarity(movie_embeddings, movie_embeddings)
 series_similarity = model.similarity(series_embeddings, series_embeddings)
+
+
+def recommend_movies(movie_title):
+    # First pass: Description-based similarity
+    movie_index = movies[movies["Title"] == movie_title].index[0]
+    movie_similarity_scores = list(enumerate(movie_similarity[movie_index]))
+    top_movies = sorted(
+        movie_similarity_scores, key=lambda x: x[1].item(), reverse=True
+    )
+
+    # Return only movie titles
+    return [movies.iloc[i[0]]["Title"] for i in top_movies[1:11]]
