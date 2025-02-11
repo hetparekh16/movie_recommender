@@ -85,3 +85,36 @@ if nav_option == "Movies":
             filtered_df.sample(20) if len(filtered_df) > 20 else filtered_df
         )
         display_movie_cards(movies_to_display.to_dict(orient="records"))
+
+
+elif nav_option == "Series":
+    st.title("Welcome to the Series Recommender System!")
+    st.write("Use the filters on the sidebar to refine your search.")
+
+    # Sidebar Filters
+    st.sidebar.header("Filter Series")
+
+    # Filter by Release Year
+    min_year, max_year = st.sidebar.slider(
+        "Release Year",
+        min_value=int(series["Release Year"].min()),
+        max_value=int(series["Release Year"].max()),
+        value=(2000, 2025),
+    )
+
+    # Apply Filters
+    filtered_df = series[
+        (series["Release Year"] >= min_year) & (series["Release Year"] <= max_year)
+    ]
+
+    # Display Filtered Results
+    st.subheader("Movies")
+
+    # Show 20 random movies initially or filtered movies
+    if filtered_df.empty:
+        st.write("No movies match your filters.")
+    else:
+        series_to_display = (
+            filtered_df.sample(20) if len(filtered_df) > 20 else filtered_df
+        )
+        display_movie_cards(series_to_display.to_dict(orient="records"))
