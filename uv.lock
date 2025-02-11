@@ -1620,6 +1620,7 @@ dependencies = [
     { name = "requests" },
     { name = "sentence-transformers" },
     { name = "streamlit" },
+    { name = "torch" },
 ]
 
 [package.metadata]
@@ -1632,6 +1633,7 @@ requires-dist = [
     { name = "requests", specifier = ">=2.32.3" },
     { name = "sentence-transformers", specifier = ">=3.4.1" },
     { name = "streamlit", specifier = ">=1.42.0" },
+    { name = "torch", specifier = ">=2.6.0" },
 ]
 
 [[package]]
