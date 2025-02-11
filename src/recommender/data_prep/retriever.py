@@ -31,3 +31,14 @@ async def fetch_page(session, page, language):
         return (
             (await response.json()).get("results", []) if response.status == 200 else []
         )
+
+
+async def fetch_movies(total_pages, language):
+    # movies = []
+    async with aiohttp.ClientSession() as session:
+        tasks = [
+            fetch_page(session, page, language) for page in range(1, total_pages + 1)
+        ]
+        results = await asyncio.gather(*tasks)
+        movies = [movie for page in results for movie in page]
+    return movies
