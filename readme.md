@@ -89,11 +89,20 @@ Built with:
 5. Open a Pull Request
 
 
-## 🎉 Release Notes v1.0
+## 🚀 Movie Recommender System v1.0 is Live! 🎉
 
-- Initial release with core recommendation features
-- Streamlit-based user interface
-- TMDB API integration
-- Content-based filtering system
-- Support for both movies and TV series
-- Visual card-based content display
+We’re excited to launch the first version of our Movie Recommender System, powered by Streamlit and the TMDB API.
+
+🔥 v1.0 Highlights:
+✅ API Fetching: Seamless data retrieval from TMDB API.
+✅ Streamlit UI: Clean, responsive, and easy-to-use interface.
+✅ Recommendation Logic: Similarity-based content suggestions for personalized discovery.
+
+## But we’re not stopping here! v2.0 is on the way! 🚀
+
+🔮 Coming Soon in v2.0:
+⚡ Parallel Batch Fetching: Faster and more efficient data retrieval.
+🧠 ChromaDB Integration: Leveraging a vector database for better recommendations.
+🔍 Enhanced Search & Retrieval: Smarter content discovery with real-time suggestions.
+
+Stay tuned for a smarter, faster, and more scalable recommendation experience! 🎬✨
