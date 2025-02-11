@@ -2,7 +2,7 @@ import pandas as pd
 from dotenv import load_dotenv
 import os
 import requests
-from recommender.config import BASE_URL, GENRE_URL, SERIES_URL
+from recommender.config import BASE_URL, GENRE_URL, SERIES_URL, MOVIE_URL
 
 load_dotenv()
 
@@ -29,3 +29,53 @@ def fetch_crew(movie_id):
     else:
         print(f"Failed to fetch crew for movie_id {movie_id}: {response.status_code}")
         return {}
+
+
+def fetch_movies_by_language(
+    total_pages, genre_mapping, language, include_adult=False, include_video=False
+):
+    movies = []
+    for page in range(1, total_pages + 1):
+        params = {
+            "api_key": API_KEY,
+            "language": "en-US",
+            "sort_by": "popularity.desc",
+            "page": page,
+            "include_adult": include_adult,
+            "include_video": include_video,
+            "with_original_language": language,
+        }
+        response = requests.get(MOVIE_URL, params=params)
+        if response.status_code == 200:
+            results = response.json().get("results", [])
+            for item in results:
+                genres = [
+                    genre_mapping.get(genre_id, "Unknown")
+                    for genre_id in item.get("genre_ids", [])
+                ]
+                movie_id = item.get("id")
+                crew_info = fetch_crew(movie_id)
+                movies.append(
+                    {
+                        "Title": item.get("title"),
+                        "Original Title": item.get("original_title"),
+                        "Genres": ", ".join(genres),
+                        "Language": item.get("original_language"),
+                        "Release Year": item.get("release_date", "")[:4],
+                        "Rating": item.get("vote_average"),
+                        "Vote Count": item.get("vote_count"),
+                        "Popularity": item.get("popularity"),
+                        "Description": item.get("overview"),
+                        "Poster Path": (
+                            f"https://image.tmdb.org/t/p/w500{item.get('poster_path')}"
+                            if item.get("poster_path")
+                            else None
+                        ),
+                        "Adult": item.get("adult", False),
+                        "Video": item.get("video", False),
+                        "Director": crew_info.get("Director", None),
+                    }
+                )
+        else:
+            print(f"Failed to fetch data for page {page}: {response.status_code}")
+    return movies
