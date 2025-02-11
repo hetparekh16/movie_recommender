@@ -17,8 +17,8 @@ dependencies = [
     "streamlit>=1.42.0",
 ]
 
-[project.scripts]
-recommender = "recommender:main"
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [build-system]
 requires = ["hatchling"]
