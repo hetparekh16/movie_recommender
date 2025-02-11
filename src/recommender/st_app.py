@@ -41,3 +41,10 @@ def display_movie_cards(movies):
                     """,
                     unsafe_allow_html=True,
                 )
+
+
+nav_option = st.radio(
+    "Navigation",
+    ("Movies", "Series", "Watch something similar"),
+    horizontal=True,
+)
