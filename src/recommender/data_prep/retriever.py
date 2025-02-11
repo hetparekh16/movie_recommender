@@ -78,3 +78,6 @@ async def store_movies(total_pages, language):
                 }
             ],
         )
+
+
+asyncio.run(store_movies(500, "en"))
