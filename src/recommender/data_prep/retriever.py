@@ -121,3 +121,14 @@ def fetch_series_by_language(total_pages, genre_mapping, language, include_adult
         else:
             print(f"Failed to fetch data for page {page}: {response.status_code}")
     return series
+
+
+def get_genres():
+    params = {"api_key": API_KEY, "language": "en-US"}
+    response = requests.get(GENRE_URL, params=params)
+    if response.status_code == 200:
+        genres = response.json().get("genres", [])
+        return {genre["id"]: genre["name"] for genre in genres}
+    else:
+        print(f"Failed to fetch genres: {response.status_code}")
+        return {}
