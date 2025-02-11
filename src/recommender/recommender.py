@@ -29,3 +29,13 @@ def recommend_movies(movie_title):
 
     # Return only movie titles
     return [movies.iloc[i[0]]["Title"] for i in top_movies[1:11]]
+
+
+def recommend_series(series_title):
+    # First pass: Description-based similarity
+    series_index = series[series["Title"] == series_title].index[0]
+    description_similarity = list(enumerate(series_similarity[series_index]))
+    top_series = sorted(description_similarity, key=lambda x: x[1].item(), reverse=True)
+
+    # Return only series titles
+    return [series.iloc[i[0]]["Title"] for i in top_series[1:11]]
